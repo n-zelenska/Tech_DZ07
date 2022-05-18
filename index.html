@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="Canvas"></canvas>
+    <script src="three.js-master/build/three.js"></script>
+    <script src="three.js-master/examples/js/geometries/ParametricGeometry.js"></script>
+    <script type="module">
+        let renderer = new THREE.WebGLRenderer({
+            canvas: document.getElementById('Canvas'),
+            antialias: true
+        })
+        renderer.setClearColor(0xCBEFFF)
+        renderer.setPixelRatio(window.devicePixelRatio)
+        renderer.setSize(window.innerWidth, window.innerHeight)
+        let camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 3000)
+        let scene = new THREE.Scene()
+
+
+        let pyramidgeometry = new THREE.CylinderGeometry(0, 0.8, 2, 4)
+        let pyramidmaterial = new THREE.MeshLambertMaterial({
+            color: 0xF3FFE2
+        })
+        let pyramidmesh = new THREE.Mesh(pyramidgeometry, pyramidmaterial)
+        pyramidmesh.position.set(0, 2, -10)
+
+        scene.add(pyramidmesh)
+        let lightOne = new THREE.AmbientLight(0xffff, 0.5)
+        scene.add(lightOne)
+        let lightTwo = new THREE.PointLight(0xffff, 0.5)
+        scene.add(lightTwo)
+        let boxgeometry = new THREE.BoxGeometry(1, 1, 1)
+        let boxmaterial = new THREE.MeshNormalMaterial({
+            color: 0xFF0000,
+            transparent: true,
+            opacity: 1
+        })
+        let boxmesh = new THREE.Mesh(boxgeometry, boxmaterial)
+        boxmesh.position.set(-0.9, 0, -6)
+        scene.add(boxmesh)
+        let spheregeometry = new THREE.SphereGeometry(0.5)
+        let spherematerial = new THREE.LineBasicMaterial({
+            color: 0x888888
+        })
+        let spheremesh = new THREE.Line(spheregeometry, spherematerial)
+        spheremesh.position.set(0.9, 0, -6)
+        scene.add(spheremesh)
+        let circlegeometry = new THREE.CircleBufferGeometry(0.5)
+        let circlematerial = new THREE.MeshStandardMaterial({
+            color: 0x098877,
+            roughness: 90.0,
+            metalness: 0.2
+        })
+        let circlemesh = new THREE.Mesh(circlegeometry, circlematerial)
+        circlemesh.position.set(2, 0, -6)
+        circlemesh.rotation.set(0, 0.5, 0)
+        scene.add(circlemesh)
+        let paraFunction = function (a, b, target) {
+   
+        let x = -5 + 5 * a
+        let y = -5 + 5 * b
+        let z = (Math.sin(a * Math.PI) + Math.sin(b * Math.PI)) * -7
+
+        target.set( x, y, z )
+
+        }
+        let parageometry = new THREE.ParametricGeometry(paraFunction, 8, 8)
+        let paramaterial = new THREE.MeshBasicMaterial({
+            color: 0xF3FFE2
+        })
+        let paramesh = new THREE.Mesh(parageometry, paramaterial)
+        paramesh.position.set(0, -2, -100)
+        scene.add(paramesh)
+        let planegeometry = new THREE.PlaneGeometry(10, 10)
+        let planematerial = new THREE.MeshPhongMaterial({
+            color: 0xF3FFE2,
+            specular: 0xFF0000,
+            shininess: 50
+        })
+        let planemesh = new THREE.Mesh(planegeometry, planematerial)
+        planemesh.position.set(0, -20, -100)
+        scene.add(planemesh)
+        let delta = 0
+
+        function render() {
+            renderer.render(scene, camera)
+            requestAnimationFrame(render)
+            pyramidmesh.rotation.y += 0.1
+            paramesh.rotation.x += 0.1
+            paramesh.rotation.y += 0.1
+            // delta += 0.1
+            // planegeometry.geometry.verticesNeedUpdate = true
+            // planegeometry.geometry.vertices[0].z = -25 + Math.sin(delta) * 50 
+        }
+        render()
+    </script>
+</body>
+
+</html>
